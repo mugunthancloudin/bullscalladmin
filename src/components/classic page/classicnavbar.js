@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Navbar, Nav, Button } from "react-bootstrap";
+import { Navbar, Nav, Button, NavDropdown } from "react-bootstrap";
 import {
   GiPayMoney,
   GiReceiveMoney,
@@ -19,6 +19,21 @@ import {
   useAccountModal,
   useChainModal,
 } from "@rainbow-me/rainbowkit";
+import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as yup from "yup";
+
+//Adding New owner Address Validation
+const OwnerAddressSchema = yup.object().shape({
+  newOwnerAddress: yup.string().required("* Wallet Address is required."),
+});
+
+//Removing New owner Address Validation
+const RemoveOwnerSchema = yup.object().shape({
+  ownerAddressToRemove: yup
+    .string()
+    .required("Owner Address to Remove is required."),
+});
 
 export default function Classicnavbar() {
   const { address, isConnected } = useAccount();
@@ -29,6 +44,8 @@ export default function Classicnavbar() {
   console.log(balance);
   const [ownerAddress, setOwnerAddress] = useState("");
   const { chain } = useNetwork();
+  const [selectedItem, setSelectedItem] = React.useState(null);
+  const walletAddresses = ["Address1", "Address2", "Address3"];
 
   useState(() => {
     if (isConnected) {
@@ -73,6 +90,8 @@ export default function Classicnavbar() {
     fetchData();
   }, [isConnected, balance, injectAmount]);
 
+  
+
   // const handleStartToggle = () => {
   //   if (startButtonText === "Start") {
   //     blockchain.RoundStart();
@@ -86,22 +105,61 @@ export default function Classicnavbar() {
   //   }
   // };
 
-  // const handleSubmit = async (e) => {
-  //   e.preventDefault();
-  //   if (!injectAmount) return;
-  //   // console.log(typeof injectAmount);
-  //   if (injectAmount > 0) {
-  //     // alert("hai mugunth");
-  //     let amount = Number(injectAmount);
-  //     await blockchain.fundInject(amount);
-  //   } else {
-  //     // alert("nothing");
-  //   }
-  // };
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (!injectAmount) return;
+    // console.log(typeof injectAmount);
+    if (injectAmount > 0) {
+      // alert("hai mugunth");
+      let amount = Number(injectAmount);
+      await blockchain.fundInject(amount);
+    } else {
+      // alert("nothing");
+    }
+  };
 
   const injectFundColorClass =
     balanceAfterTransfer < 0 ? "text-danger" : "text-success";
   const isSubmitDisabled = balanceAfterTransfer < 0;
+
+  //Add owner Address
+  const {
+    register: registerOwner,
+    handleSubmit: handleSubmitOwnerAddress,
+    formState: { errors: ownerAddressErrors },
+  } = useForm({
+    resolver: yupResolver(OwnerAddressSchema),
+  });
+
+  //Remove owner Address
+  const {
+    register: registerRemoveOwner,
+    handleSubmit: handleSubmitRemoveOwnerAddress,
+    formState: { errors: removeOwnerErrors },
+  } = useForm({
+    resolver: yupResolver(RemoveOwnerSchema),
+  });
+
+  //Function Call On Add owner Address
+  const addNewOwnerAddress = async (data) => {
+    try {
+      console.log(data);
+      // const ownerDetails = await blockchain.AddOwner(data.newOwnerAddress);
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  };
+
+  //Function Call On Remove owner Address
+  const removeOwnerAddress = async (data) => {
+    try {
+      // const removedOwner = await blockchain.removeOwner(
+      //   data.ownerAddressToRemove
+      // );
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  };
 
   return (
     <div>
@@ -112,7 +170,6 @@ export default function Classicnavbar() {
         </Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav" className="justify-content-end ">
-
           {/* <Nav className="me-3 ms-3">
             {isConnected ? (
               <div
@@ -126,96 +183,229 @@ export default function Classicnavbar() {
             )}
           </Nav> */}
 
-          {/* <Nav className="me-3 justify-content-end">
+          <Nav className="me-3 justify-content-end">
             {!isConnected ? (
               <></>
             ) : (
               <div>
                 {address.toLowerCase() === ownerAddress ? (
                   <>
-                    <Popup
-                      trigger={
-                        <div className="ms-3 justify-content-end d-flex classicButton mt-3">
-                          <spam className="me-2 text-nowrap">Inject Fund</spam>{" "}
-                          <GiPayMoney size={25} />
-                        </div>
-                      }
-                      modal
+                    <NavDropdown
+                      title="Control Privillages"
+                      className=" justify-content-end d-flex fw-bold mt-2 me-3"
                     >
-                      {(close) => (
+                      <NavDropdown.Item onClick={() => setSelectedItem("3.1")}>
+                        Add Owner Address
+                      </NavDropdown.Item>
+                      <NavDropdown.Item onClick={() => setSelectedItem("3.2")}>
+                        Remove Owner Address
+                      </NavDropdown.Item>
+                      <NavDropdown.Divider />
+                      <NavDropdown.Item onClick={() => setSelectedItem("3.3")}>
+                        Something
+                      </NavDropdown.Item>
+                    </NavDropdown>
+
+                    {selectedItem && (
+                      <Popup
+                        modal
+                        open={true}
+                        onClose={() => setSelectedItem(null)}
+                      >
                         <div className="modals">
-                          <button className="close pb-2" onClick={close}>
+                          <button
+                            className="close pb-2"
+                            onClick={() => setSelectedItem(null)}
+                          >
                             &times;
                           </button>
                           <div className="content">
-                            <div className="card-body classic_betting_body">
-                              <form onSubmit={handleSubmit}>
-                                <div className="classic_betting_body_bg">
-                                  <div className="row  d-flex mt-2">
-                                    <div className="col-lg-6">
-                                      Max Amount To Inject
+                            {selectedItem === "3.1" && (
+                              <div className="card border border-5 border-warning">
+                                <form
+                                  onSubmit={handleSubmitOwnerAddress(
+                                    addNewOwnerAddress
+                                  )}
+                                >
+                                  <div className="form-group row mt-2">
+                                    <div className="col-lg-6 text-center mt-1">
+                                      <label>
+                                        Wallet Address Of New Owner :
+                                      </label>
                                     </div>
-                                    <div className="col-lg-6 text-end">
-                                      {" "}
-                                      {balance} {data?.symbol}
-                                    </div>
-                                  </div>
-                                  <div className="row d-flex  mt-3">
-                                    <div className="col-lg-6">Amount</div>
-                                    <div className="col-lg-6">
+                                    <div className="col-lg-6 pe-4">
                                       <input
-                                        type="number"
-                                        name="bettingAmount"
-                                        id="bettingAmount"
-                                        value={injectAmount}
-                                        min="0"
-                                        max={balanceAfterTransfer}
-                                        onChange={(e) => {
-                                          setInjectAmount(e.target.value);
-                                        }}
-                                        className="form-control w-100"
+                                        type="text"
+                                        className="form-control"
+                                        {...registerOwner("newOwnerAddress")}
                                       />
+                                      {ownerAddressErrors.newOwnerAddress && (
+                                        <p className="text-danger fw-bold">
+                                          {
+                                            ownerAddressErrors.newOwnerAddress
+                                              .message
+                                          }
+                                        </p>
+                                      )}
                                     </div>
                                   </div>
-                                  <div className="row d-flex mt-3">
-                                    <div className="col-lg-6">
-                                      Balane After Transfer
-                                    </div>
-                                    <div
-                                      className={`col-lg-6 text-end fw-bold  ${injectFundColorClass}`}
-                                    >
-                                      {balanceAfterTransfer} Matic
-                                    </div>
-                                  </div>
-                                </div>
 
-                                <div className="row text-center">
-                                  <div className="col-lg-12">
-                                    <button
-                                      type="submit"
-                                      className="bettingButton01 text-center"
-                                      disabled={isSubmitDisabled}
-                                      onClick={handleSubmit}
-                                    >
-                                      Inject Fund
+                                  <div className="mt-3 mb-3 text-center">
+                                    <button type="submit" className="w-50">
+                                      Add Owner
                                     </button>
                                   </div>
-                                </div>
-                              </form>
+                                </form>
+                              </div>
+                            )}
+
+                            {selectedItem === "3.2" && (
+                              <div className="card border border-5 border-warning">
+                                <form
+                                  onSubmit={handleSubmitRemoveOwnerAddress(
+                                    removeOwnerAddress
+                                  )}
+                                >
+                                  <div className="form-group row mt-2">
+                                    <div className="col-lg-6 text-center mt-1">
+                                      <label>Owner Address to Remove:</label>
+                                    </div>
+                                    <div className="col-lg-6 pe-4">
+                                      <input
+                                        type="text"
+                                        className="form-control"
+                                        {...registerRemoveOwner(
+                                          "ownerAddressToRemove"
+                                        )}
+                                      />
+                                      {removeOwnerErrors.ownerAddressToRemove && (
+                                        <p className="text-danger fw-bold">
+                                          {
+                                            removeOwnerErrors
+                                              .ownerAddressToRemove.message
+                                          }
+                                        </p>
+                                      )}
+                                    </div>
+                                  </div>
+
+                                  <div className="mt-3 mb-3 text-center">
+                                    <button type="submit" className="w-50">
+                                      Remove Owner
+                                    </button>
+                                  </div>
+                                </form>
+                              </div>
+                            )}
+
+                            {selectedItem === "3.3" && (
+                              <div>
+                              <p>List of Wallet Addresses:</p>
+                              <ul>
+                                {walletAddresses.map((address, index) => (
+                                  <li key={index}>{address}</li>
+                                ))}
+                              </ul>
                             </div>
+                            )}
                           </div>
                         </div>
-                      )}
-                    </Popup>
+                      </Popup>
+                    )}
                   </>
                 ) : (
+                  // <>
+                  //   <Popup
+                  //     trigger={
+                  //       <div className="ms-3 justify-content-end d-flex classicButton mt-3">
+                  //         <spam className="me-2 text-nowrap">Control Privillages</spam>
+                  //       </div>
+                  //     }
+                  //     modal
+                  //   >
+                  //     {(close) => (
+                  //       <div className="modals">
+                  //         <button className="close pb-2" onClick={close}>
+                  //           &times;
+                  //         </button>
+                  //         <div className="content">
+                  //           <div className="card-body classic_betting_body">
+                  //             <form onSubmit={handleSubmit}>
+                  //               <div className="classic_betting_body_bg">
+                  //                 <div className="row  d-flex mt-2">
+                  //                   <div className="col-lg-6">
+                  //                     Max Amount To Inject
+                  //                   </div>
+                  //                   <div className="col-lg-6 text-end">
+                  //                     {" "}
+                  //                     {balance} {data?.symbol}
+                  //                   </div>
+                  //                 </div>
+                  //                 <div className="row d-flex  mt-3">
+                  //                   <div className="col-lg-6">Amount</div>
+                  //                   <div className="col-lg-6">
+                  //                     <input
+                  //                       type="number"
+                  //                       name="bettingAmount"
+                  //                       id="bettingAmount"
+                  //                       value={injectAmount}
+                  //                       min="0"
+                  //                       max={balanceAfterTransfer}
+                  //                       onChange={(e) => {
+                  //                         setInjectAmount(e.target.value);
+                  //                       }}
+                  //                       className="form-control w-100"
+                  //                     />
+                  //                   </div>
+                  //                 </div>
+                  //                 <div className="row d-flex mt-3">
+                  //                   <div className="col-lg-6">
+                  //                     Balane After Transfer
+                  //                   </div>
+                  //                   <div
+                  //                     className={`col-lg-6 text-end fw-bold  ${injectFundColorClass}`}
+                  //                   >
+                  //                     {balanceAfterTransfer} Matic
+                  //                   </div>
+                  //                 </div>
+                  //               </div>
+
+                  //               <div className="row text-center">
+                  //                 <div className="col-lg-12">
+                  //                   <button
+                  //                     type="submit"
+                  //                     className="bettingButton01 text-center"
+                  //                     disabled={isSubmitDisabled}
+                  //                     onClick={handleSubmit}
+                  //                   >
+                  //                     Inject Fund
+                  //                   </button>
+                  //                 </div>
+                  //               </div>
+                  //             </form>
+                  //           </div>
+                  //         </div>
+                  //       </div>
+                  //     )}
+                  //   </Popup>
+                  // </>
                   <div>&nbsp;</div>
                 )}
               </div>
             )}
-          </Nav> */}
+          </Nav>
 
-          
+          {/* <NavDropdown
+            title="Dropdown"
+            className="text-white justify-content-end d-flex fw-bold mt-2 me-3"
+          >
+            <NavDropdown.Item href="#action/3.1">Action</NavDropdown.Item>
+            <NavDropdown.Item href="#action/3.2">
+              Another action
+            </NavDropdown.Item>
+            <NavDropdown.Item href="#action/3.3">Something</NavDropdown.Item>
+          </NavDropdown> */}
+
           <Nav className=" d-flex me-3">
             {!isConnected ? (
               ""
