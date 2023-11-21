@@ -1,0 +1,117 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,500;1,600;1,700;1,900&display=swap");
+
+body {
+  font-family: "Poppins", sans-serif;
+}
+
+:root {
+  --dark: #2c302e;
+  --black: #000000;
+  --dark-one: #313533;
+  --white: #ffffff;
+  --blue: #9e7cff;
+  --blue-bg: #353659;
+  --green: #2ab57d;
+  --red: #fd625e;
+  --yellow: #ffbf53;
+  --gray: #f2f4f7;
+  --black: #000000;
+  --gray-text: #a2a3b5;
+}
+
+/* bg */
+
+.green-bg {
+  background-color: var(--green) !important;
+}
+
+.blue-bg {
+  background-color: var(--blue-bg) !important;
+}
+
+.red-bg {
+  background-color: var(--red) !important;
+}
+
+.black-bg {
+  background-color: var(--black);
+}
+/* text */
+
+.green-text {
+  color: var(--green) !important;
+}
+
+.red-text {
+  color: var(--red) !important;
+}
+
+.gray-text {
+  color: var(--gray) !important;
+}
+
+.yellow-text {
+  color: var(--yellow) !important;
+}
+
+/* font-size */
+
+.fs-10 {
+  font-size: 10px !important;
+}
+
+.fs-11 {
+  font-size: 11px !important;
+}
+.fs-12 {
+  font-size: 12px !important;
+}
+
+.fs-13 {
+  font-size: 13px !important;
+}
+
+.fs-14 {
+  font-size: 14px !important;
+}
+
+.fs-15 {
+  font-size: 15px !important;
+}
+
+.fs-16 {
+  font-size: 16px !important;
+}
+
+.fs-17 {
+  font-size: 17px !important;
+}
+
+.fs-18 {
+  font-size: 18px !important;
+}
+
+.fs-19 {
+  font-size: 19px !important;
+}
+
+.fs-20 {
+  font-size: 20px !important;
+}
+
+.fs-22 {
+  font-size: 22px !important;
+}
+
+.fs-25 {
+  font-size: 25px !important;
+}
+
+/* common */
+.li-remove {
+  list-style: none;
+}
+
+.underline-remove {
+  text-decoration: none;
+}

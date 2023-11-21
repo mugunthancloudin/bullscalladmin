@@ -1,0 +1,101 @@
+.betting_card {
+  border: none !important;
+}
+.betting_card_body {
+  border-radius: 0 0 10px 10px !important;
+}
+
+.betting_timer {
+  color: var(--green);
+  font-weight: 500;
+}
+
+.betting_head_title {
+  font-weight: 500;
+  color: var(--white);
+  font-size: 16px;
+}
+
+.betting_card_header {
+  display: flex;
+  justify-content: space-between;
+  background-color: var(--black) !important;
+  color: var(--white) !important;
+}
+
+.betting_head_icon {
+  color: inherit !important;
+}
+
+.betting_up {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50px 50px 0px 0px;
+  padding: 20px 0 10px 0;
+  width: 90%;
+  margin: 0px auto;
+}
+
+.betting_up_text {
+  font-size: 23px;
+  color: var(--white);
+  font-weight: 500;
+}
+
+.betting_up_subtext {
+  font-size: 15px;
+  font-weight: 500;
+  margin-bottom: 4px;
+  color: var(--white);
+}
+
+.betting_body {
+  border: 3px solid var(--blue) !important;
+  background-color: var(--black);
+  padding: 30px 20px;
+  border-radius: 20px !important;
+}
+
+.betting_body_h6 {
+  font-size: 20px;
+  color: var(--white);
+}
+
+.betting_body_h6_1 {
+  font-size: 22px;
+  color: var(--white);
+  margin-bottom: -5px !important;
+}
+
+.betting_body_btn {
+  padding: 10px 5px;
+  border-radius: 3px !important;
+}
+
+.betting_down {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  border-radius: 0px 0px 50px 50px;
+  padding: 10px 0 20px 0;
+  width: 90%;
+  margin: 0px auto;
+}
+
+.betting_network_img {
+  width: 30px;
+  margin-top: 20px;
+}
+.betting_network_img img {
+  width: 30px;
+}
+
+.betting_enter_btn {
+  width: 80%;
+  font-size: 16px;
+  font-weight: 500;
+  border-radius: 8px !important;
+}
