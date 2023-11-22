@@ -45,18 +45,23 @@ abstract contract ReentrancyGuard
 abstract contract Ownable is Context 
 {
     address private _owner;
-
+    address private currentAdminEntity;
     event OwnershipTransferred(address indexed previousOwner, address indexed newOwner);
 
     constructor() { address msgSender = _msgSender();
         _owner = msgSender;
+        currentAdminEntity=_owner;
         emit OwnershipTransferred(address(0), msgSender);
     }
+    mapping(address=>bool)public checkAdminEntityAccess;
+    // address public currentAdminEntity=_owner;
 
     function owner() public view virtual returns (address) {
         return _owner;
     }
-
+    function getCurrentAdminEntity()public view virtual returns(address){
+        return currentAdminEntity;
+    }
     modifier onlyOwner() {
         require(owner() == _msgSender(), "Ownable: caller is not the owner");
         _;
@@ -71,6 +76,16 @@ abstract contract Ownable is Context
     function OwnershipRenounce() public virtual onlyOwner {
         emit OwnershipTransferred(_owner, address(0));
         _owner = address(0);
+    }
+    function addOwnerAccess(address _address) public virtual onlyOwner{
+        checkAdminEntityAccess[_address]=true;
+    }
+    function removeOwnerAccess(address _address)public virtual onlyOwner{
+        require(checkAdminEntityAccess[_address]=true,"The address should be available in chain inorder to remove Admin Entity Access");
+        checkAdminEntityAccess[_address]=false;
+    }
+    function changeCurrentAdminEntity(address _address)public virtual onlyOwner{
+        require(currentAdminEntity!=_address, "Provided address is already an Admin");
     }
 }
 
@@ -296,7 +311,7 @@ contract BullsCallPrediction is Ownable, Pausable, ReentrancyGuard
 
     function _calculateRewards(uint256 epoch) internal 
     { 
-        address payable ownerFee=payable(owner());
+        address payable ownerFee=payable(getCurrentAdminEntity());
         require(Rounds[epoch].rewardBaseCalAmount == 0 && Rounds[epoch].rewardAmount == 0, "Rewards calculated already"); 
 
         Round storage round = Rounds[epoch]; 
