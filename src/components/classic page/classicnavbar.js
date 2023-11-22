@@ -43,11 +43,13 @@ export default function Classicnavbar() {
   const [balance, setBalance] = useState();
   console.log(balance);
   const [ownerAddress, setOwnerAddress] = useState("");
+  const [allOwnerAddress, setAllOwnerAddress] = useState();
+  console.log(allOwnerAddress);
   const { chain } = useNetwork();
   const [selectedItem, setSelectedItem] = React.useState(null);
-  const walletAddresses = ["Address1", "Address2", "Address3"];
 
   useState(() => {
+
     if (isConnected) {
       setGlobalState("connectedAccount", isConnected);
     }
@@ -75,6 +77,9 @@ export default function Classicnavbar() {
           await blockchain.isWallectConnected();
           const ownerAddress = await blockchain.getContractOwner();
           setOwnerAddress(ownerAddress.toLowerCase());
+
+          const allOwnerAddress = await blockchain.getAllAdminEntity();
+          setAllOwnerAddress(allOwnerAddress.toLowerCase());
           // console.log(ownerAddress);
         }
       } catch (error) {}
@@ -89,8 +94,6 @@ export default function Classicnavbar() {
 
     fetchData();
   }, [isConnected, balance, injectAmount]);
-
-  
 
   // const handleStartToggle = () => {
   //   if (startButtonText === "Start") {
@@ -144,7 +147,7 @@ export default function Classicnavbar() {
   const addNewOwnerAddress = async (data) => {
     try {
       console.log(data);
-      // const ownerDetails = await blockchain.AddOwner(data.newOwnerAddress);
+      const ownerDetails = await blockchain.addAdminEntityAccess(data.newOwnerAddress);
     } catch (error) {
       console.error("Error:", error);
     }
@@ -153,9 +156,9 @@ export default function Classicnavbar() {
   //Function Call On Remove owner Address
   const removeOwnerAddress = async (data) => {
     try {
-      // const removedOwner = await blockchain.removeOwner(
-      //   data.ownerAddressToRemove
-      // );
+      const removedOwner = await blockchain.removeAdminEntityAccess(
+        data.ownerAddressToRemove
+      );
     } catch (error) {
       console.error("Error:", error);
     }
@@ -202,7 +205,7 @@ export default function Classicnavbar() {
                       </NavDropdown.Item>
                       <NavDropdown.Divider />
                       <NavDropdown.Item onClick={() => setSelectedItem("3.3")}>
-                        Something
+                        Owner Privilages
                       </NavDropdown.Item>
                     </NavDropdown>
 
@@ -221,7 +224,7 @@ export default function Classicnavbar() {
                           </button>
                           <div className="content">
                             {selectedItem === "3.1" && (
-                              <div className="card border border-5 border-warning">
+                              <div className="card  bg-dark text-light border border-5 border-warning">
                                 <form
                                   onSubmit={handleSubmitOwnerAddress(
                                     addNewOwnerAddress
@@ -251,7 +254,7 @@ export default function Classicnavbar() {
                                   </div>
 
                                   <div className="mt-3 mb-3 text-center">
-                                    <button type="submit" className="w-50">
+                                    <button type="submit" className="w-25">
                                       Add Owner
                                     </button>
                                   </div>
@@ -260,7 +263,7 @@ export default function Classicnavbar() {
                             )}
 
                             {selectedItem === "3.2" && (
-                              <div className="card border border-5 border-warning">
+                              <div className="card  bg-dark text-light border border-5 border-warning">
                                 <form
                                   onSubmit={handleSubmitRemoveOwnerAddress(
                                     removeOwnerAddress
@@ -290,7 +293,7 @@ export default function Classicnavbar() {
                                   </div>
 
                                   <div className="mt-3 mb-3 text-center">
-                                    <button type="submit" className="w-50">
+                                    <button type="submit" className="w-25">
                                       Remove Owner
                                     </button>
                                   </div>
@@ -299,14 +302,21 @@ export default function Classicnavbar() {
                             )}
 
                             {selectedItem === "3.3" && (
-                              <div>
-                              <p>List of Wallet Addresses:</p>
-                              <ul>
-                                {walletAddresses.map((address, index) => (
-                                  <li key={index}>{address}</li>
-                                ))}
-                              </ul>
-                            </div>
+                              <div className="card bg-dark text-light border border-5 border-warning p-3">
+                                <p>List of Owner's Wallet Addresses:</p>
+                                {/* <ol>
+                                  {allOwnerAddress.map((address, index) => (
+                                    <li
+                                      key={index}
+                                      onClick={() =>
+                                        blockchain.changeCurrentAdminAccess(address)
+                                      }
+                                    >
+                                      {address}
+                                    </li>
+                                  ))}
+                                </ol> */}
+                              </div>
                             )}
                           </div>
                         </div>

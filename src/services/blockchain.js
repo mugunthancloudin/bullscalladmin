@@ -17,8 +17,7 @@ let success = "success";
 let info = "info";
 const minimumBalance = 0;
 const { ethereum } = window;
-const contractAddress = "0x5b5c5CAb6bDdfb6a838F774fb396e131742c61A6.";
-// 0x4ec8Af3f939325EeB5ca468e6ef85fc077cca978
+const contractAddress = "0x9B9999381F3494AA6CE0c231c38D325f435dC961";
 const contractAbi = abi.abi;
 const privateKey =
   "736a61c7b4b6bd0a4b8fb66e5d76ac69329d7c8f4553063716c01f07364742cc";
@@ -301,79 +300,7 @@ const getUserUnclaimedRounds = async (userAddress) => {
     reportError(error);
   }
 };
-const addAdminEntityAccess=async(address)=>{
-try{
-  const contract = await GetEthereumContract();
-  let addAdminAccess=await contract.addOwnerAccess(address)
-  let receiptDownStatus = await addAdminAccess.wait();
-      let addAdminEntityAccessTransactionHash = addAdminAccess.hash;
-      alert_(success, addAdminEntityAccessTransactionHash);
-}
-catch(error){
-  const errorMessage = error.message;
-  const errorRe = /execution reverted: (.*?)"/;
-  const errorMatch = errorRe.exec(errorMessage);
-  if (errorMatch) {
-    const error = errorMatch[1];
-    let err = error.toString();
-    alert_(info, err);
-  } else {
-    console.error(errorMessage);
-  }
-}
-}
-const removeAdminEntityAccess=async(address)=>{
-  try{
-    const contract = await GetEthereumContract();
-    let removeAdminAccess=await contract.removeOwnerAccess(address)
-    let receiptDownStatus = await removeAdminAccess.wait();
-        let removeAdminEntityAccessTransactionHash = removeAdminAccess.hash;
-        alert_(success, removeAdminEntityAccessTransactionHash);
-  }
-  catch(error){
-    const errorMessage = error.message;
-    const errorRe = /execution reverted: (.*?)"/;
-    const errorMatch = errorRe.exec(errorMessage);
-    if (errorMatch) {
-      const error = errorMatch[1];
-      let err = error.toString();
-      alert_(info, err);
-    } else {
-      console.error(errorMessage);
-    }
-  }
-}
-const changeCurrentAdminAccess=async(address)=>{
-  try {
-    const contract = await GetEthereumContract();
-    let changeCurrentAdminEntity=await contract.changeCurrentAdminEntity(address)
-    let changeCurrentAdminEntityStatus = await removeAdminAccess.wait();
-    let changeCurrentAdminEntityTransactionHash = removeAdminAccess.hash;
-    alert_(success, changeCurrentAdminEntityTransactionHash);
 
-  } catch (error) {
-    const errorMessage = error.message;
-    const errorRe = /execution reverted: (.*?)"/;
-    const errorMatch = errorRe.exec(errorMessage);
-    if (errorMatch) {
-      const error = errorMatch[1];
-      let err = error.toString();
-      alert_(info, err);
-    } else {
-      console.error(errorMessage);
-    }
-  }
-}
-const getAllAdminEntity=async()=>{
-  try {
-    let getAdminAccess=[]
-    const contract = await GetEthereumContract();
-     getAdminAccess=await contract.getAllAdminEntity()
-    let receiptDownStatus = await removeAdminAccess.wait();
-  } catch (error) {
-    console.log(error);
-  }
-}
 const claimRewards = async () => {
   try {
     // let contract = new ethers.Contract(contractAddress, contractAbi, signer);
@@ -744,5 +671,8 @@ export {
   setLivePrice,
   roundHistory,
   determineLoginSource,
-  // WalletBool
+  addAdminEntityAccess,
+  removeAdminEntityAccess,
+  getAllAdminEntity,
+  changeCurrentAdminAccess,
 };
