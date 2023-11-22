@@ -31,6 +31,11 @@ module.exports = {
       gasPrice: 20000000000, // Adjust the gasPrice as needed for your tests
       accounts: { mnemonic: mnemonic },
     },
+    goerli: {
+      url: "https://rpc.ankr.com/eth_goerli",
+      chainId: 5,
+      accounts: {mnemonic: mnemonic},
+    },
     testnet: {
       url: "https://data-seed-prebsc-1-s1.binance.org:8545",
       chainId: 97,

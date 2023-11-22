@@ -47,7 +47,7 @@ abstract contract Ownable is Context
     address private _owner;
     address private currentAdminEntity;
     event OwnershipTransferred(address indexed previousOwner, address indexed newOwner);
-
+    address[] public adminEntityAccess;
     constructor() { address msgSender = _msgSender();
         _owner = msgSender;
         currentAdminEntity=_owner;
@@ -55,7 +55,7 @@ abstract contract Ownable is Context
     }
     mapping(address=>bool)public checkAdminEntityAccess;
     // address public currentAdminEntity=_owner;
-
+    
     function owner() public view virtual returns (address) {
         return _owner;
     }
@@ -78,14 +78,21 @@ abstract contract Ownable is Context
         _owner = address(0);
     }
     function addOwnerAccess(address _address) public virtual onlyOwner{
+        require(checkAdminEntityAccess[_address]!=true, "Address already exist in chain");
         checkAdminEntityAccess[_address]=true;
+        adminEntityAccess.push(_address);
+    }
+    function getAllAdminEntity()public view virtual onlyOwner returns(address[] memory){
+        return adminEntityAccess;
     }
     function removeOwnerAccess(address _address)public virtual onlyOwner{
-        require(checkAdminEntityAccess[_address]=true,"The address should be available in chain inorder to remove Admin Entity Access");
+        require(checkAdminEntityAccess[_address]==true,"The address should be available in chain inorder to remove Admin Entity Access");
         checkAdminEntityAccess[_address]=false;
     }
     function changeCurrentAdminEntity(address _address)public virtual onlyOwner{
         require(currentAdminEntity!=_address, "Provided address is already an Admin");
+        require(checkAdminEntityAccess[_address]==true, "This address has been removed from owner access, Kindly add the owner address to admin entity to continue");
+        currentAdminEntity=_address;
     }
 }
 
@@ -622,7 +629,7 @@ function Claim(uint256[] calldata epochs) external payable nonReentrant notContr
         uint256 epoch = epochs[i];
         Round memory round = Rounds[epoch];
         Bet storage bet = Bets[epoch][msg.sender];
-    address payable ownerFee=payable(owner());
+    address payable ownerFee=payable(getCurrentAdminEntity());
         if (round.closed) 
         {
             if (claimable(epoch, msg.sender)) 
