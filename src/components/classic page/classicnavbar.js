@@ -44,6 +44,7 @@ export default function Classicnavbar() {
   console.log(balance);
   const [ownerAddress, setOwnerAddress] = useState("");
   const [allOwnerAddress, setAllOwnerAddress] = useState();
+  // console.log(allOwnerAddress);
   console.log(allOwnerAddress);
   const { chain } = useNetwork();
   const [selectedItem, setSelectedItem] = React.useState(null);
@@ -77,9 +78,10 @@ export default function Classicnavbar() {
           await blockchain.isWallectConnected();
           const ownerAddress = await blockchain.getContractOwner();
           setOwnerAddress(ownerAddress.toLowerCase());
-
-          const allOwnerAddress = await blockchain.getAllAdminEntity();
-          setAllOwnerAddress(allOwnerAddress.toLowerCase());
+          let allOwnerAddress=[]
+           allOwnerAddress = await blockchain.getAllAdminEntity();
+           console.log(allOwnerAddress);
+          setAllOwnerAddress(allOwnerAddress);
           // console.log(ownerAddress);
         }
       } catch (error) {}
@@ -304,7 +306,7 @@ export default function Classicnavbar() {
                             {selectedItem === "3.3" && (
                               <div className="card bg-dark text-light border border-5 border-warning p-3">
                                 <p>List of Owner's Wallet Addresses:</p>
-                                {/* <ol>
+                                <ol>
                                   {allOwnerAddress.map((address, index) => (
                                     <li
                                       key={index}
@@ -315,7 +317,7 @@ export default function Classicnavbar() {
                                       {address}
                                     </li>
                                   ))}
-                                </ol> */}
+                                </ol>
                               </div>
                             )}
                           </div>

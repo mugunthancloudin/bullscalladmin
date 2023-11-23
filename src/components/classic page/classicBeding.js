@@ -141,7 +141,7 @@ export default function ClassicBeding() {
     const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
     // await delay(2000);
     let contract = await blockchain.GetEthereumContract();
-
+// console.log("get contract");
     let rounds = await blockchain.getRoundDetails();
     // console.log(rounds);
     let stage_Start = rounds.get("stageStart");
@@ -274,7 +274,7 @@ export default function ClassicBeding() {
 
   const livePrice = async () => {
     let checkingData = await blockchain.setLivePrice();
-    console.log(checkingData);
+    // console.log(checkingData);
   };
 
   const getCurrentTimestamp = () => {
@@ -284,7 +284,7 @@ export default function ClassicBeding() {
   }; 
   
   var lockTimeDiffrence = ((lockRoundLockTime - currentTime )+28)
-  console.log(lockTimeDiffrence);
+  // console.log(lockTimeDiffrence);
 
   if (lockTimeDiffrence < 0) {
     lockTimeDiffrence = 0;
