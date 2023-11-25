@@ -25,8 +25,11 @@ export default function MobileLogin() {
     <>
       <div className="container-fluid ">
         <div className="row navbar_background">
+          <div className="d-flex pt-2 pb-2">
           <img src={logo} className="mobilelogo" />
           <h2 className="text-white ms-2 mt-2 fw-bold">Bull's Call</h2>
+          </div>
+          
         </div>
         <div className="container">
           <div className="row">

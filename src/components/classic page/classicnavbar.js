@@ -82,7 +82,7 @@ export default function Classicnavbar() {
            allOwnerAddress = await blockchain.getAllAdminEntity();
            console.log(allOwnerAddress);
           setAllOwnerAddress(allOwnerAddress);
-          // console.log(ownerAddress);
+          console.log(ownerAddress);
         }
       } catch (error) {}
     }
